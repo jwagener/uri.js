@@ -3,7 +3,7 @@ task :build => [:create_build_dir, :build_js, :compress] do
 end
 
 task :create_build_dir do
-  sh "mkdir -p #{build_dir}"
+  sh "mkdir -p build/"
 end
 
 task :build_js do
