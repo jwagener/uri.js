@@ -20,26 +20,26 @@ URI.js provides a ruby URI likish class for JavaScript + Rails likish params en/
   
   You can check if the URI is relative or absolute usining isRelative() or isAbsolute():
   
-      uri.isRelative() // => false
-      uri.isAbsolute() // => true
+      uri.isRelative()  // => false
+      uri.isAbsolute()  // => true
       
   All fragments can be manipulated through the attributes.
   The URI string can be reconstructed using toString():
   
       uri.host = "somewhere.net"
-      uri.toString() // => "http://somewhere.net/bla?abc=def#foo=bar"
+      uri.toString()    // => "http://somewhere.net/bla?abc=def#foo=bar"
       
       
   To take advantage of the rails likish params parsing pass decodeQuery and/or decodeFragment as an option:
   
       var uri = new URI("http://example.com/bla?abc=def#foo=bar", {"decodeQuery": true, "decodeFragment": true});
-      uri.query    // => {"abc": "def"}
-      uri.fragment // => {"foo": "bar"}
+      uri.query         // => {"abc": "def"}
+      uri.fragment      // => {"foo": "bar"}
   
   The toString() method will take care of the encoding if query or fragment is an object:
   
       uri.query = {"something": "else"}
-      uri.toString() // => "http://example.com/bla?something=else#foo=bar"
+      uri.toString()    // => "http://example.com/bla?something=else#foo=bar"
 
 ## Changelog
 
