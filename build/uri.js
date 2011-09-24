@@ -10,23 +10,6 @@ URI = function(uri, options) {
   }
   URI_REGEXP = /^(?:([^:\/?\#]+):)?(?:\/\/([^\/?\#]*))?([^?\#]*)(?:\?([^\#]*))?(?:\#(.*))?/;
   AUTHORITY_REGEXP = /^(?:([^@]*)@)?([^:]*)(?::(\d*))?/;
-  this.scheme = this.user = this.password = this.host = this.port = this.path = this.query = this.fragment = null;
-  result = uri.match(URI_REGEXP);
-  this.scheme = result[1];
-  authority = result[2];
-  if (authority != null) {
-    authority_result = authority.match(AUTHORITY_REGEXP);
-    userinfo = authority_result[1];
-    if (userinfo != null) {
-      this.user = userinfo.split(":")[0];
-      this.password = userinfo.split(":")[1];
-    }
-    this.host = authority_result[2];
-    this.port = parseInt(authority_result[3], 10) || null;
-  }
-  this.path = result[3];
-  this.query = result[4];
-  this.fragment = result[5];
   this.toString = function() {
     var str;
     str = "";
@@ -73,7 +56,7 @@ URI = function(uri, options) {
     return params;
   };
   this.normalizeParams = function(params, name, v) {
-    var after, child_key, k, lastP, result_i;
+    var after, child_key, k, lastP, result, result_i;
     if (v == null) {
       v = NULL;
     }
@@ -135,5 +118,28 @@ URI = function(uri, options) {
     }
     return paramString;
   };
+  this.scheme = this.user = this.password = this.host = this.port = this.path = this.query = this.fragment = null;
+  result = uri.match(URI_REGEXP);
+  this.scheme = result[1];
+  authority = result[2];
+  if (authority != null) {
+    authority_result = authority.match(AUTHORITY_REGEXP);
+    userinfo = authority_result[1];
+    if (userinfo != null) {
+      this.user = userinfo.split(":")[0];
+      this.password = userinfo.split(":")[1];
+    }
+    this.host = authority_result[2];
+    this.port = parseInt(authority_result[3], 10) || null;
+  }
+  this.path = result[3];
+  this.query = result[4];
+  if (options.decodeQuery) {
+    this.query = this.decodeParams(this.query);
+  }
+  this.fragment = result[5];
+  if (options.decodeFragment) {
+    this.fragment = this.decodeParams(this.fragment);
+  }
   return this;
 };

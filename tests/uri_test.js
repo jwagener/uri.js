@@ -55,6 +55,18 @@ $(document).ready(function(){
     equals(url.fragment, 'f=2');
   });
   
+  test("decodeQuery option", function(){
+    var originalUrl = '/someweird/path.js?q=1#f=2'    
+    var url = new URI(originalUrl, {decodeQuery: true});
+    deepEqual(url.query, {'q': '1'});
+  });
+  
+  test("decodeHash option", function(){
+    var originalUrl = '/someweird/path.js?q=1#f=2'    
+    var url = new URI(originalUrl, {decodeFragment: true});
+    deepEqual(url.fragment, {'f': '2'});
+  });
+  
   module("decodeParams");
   test("decodeParams", function(){
     var uri = new URI();
