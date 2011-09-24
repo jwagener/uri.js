@@ -1,6 +1,7 @@
 URI = (uri="", options={}) ->
   URI_REGEXP        = /^(?:([^:\/?\#]+):)?(?:\/\/([^\/?\#]*))?([^?\#]*)(?:\?([^\#]*))?(?:\#(.*))?/
   AUTHORITY_REGEXP  = /^(?:([^@]*)@)?([^:]*)(?::(\d*))?/
+  this.scheme = this.user = this.password = this.host = this.port = this.path = this.query = this.fragment = null
   
   this.toString    = ->
     str = ""
@@ -90,29 +91,28 @@ URI = (uri="", options={}) ->
     
     paramString
 
-  this.scheme = this.user = this.password = this.host = this.port = this.path = this.query = this.fragment = null
-  
-  result           = uri.match(URI_REGEXP)  
-  this.scheme      = result[1] 
-  authority        = result[2]
-  
-  if authority?
-    authority_result = authority.match(AUTHORITY_REGEXP)
-    userinfo         = authority_result[1]     
-    if userinfo?
-      this.user      = userinfo.split(":")[0]
-      this.password  = userinfo.split(":")[1]
-  
-    this.host        = authority_result[2]
-    this.port        = parseInt(authority_result[3], 10) || null
-  
-  this.path        = result[3]
-  
-  this.query    = result[4]
-  this.query    = this.decodeParams(this.query)    if options.decodeQuery  
-  
-  this.fragment = result[5]
-  this.fragment = this.decodeParams(this.fragment) if options.decodeFragment
+  this.parse = (uri="", options={}) ->
+    result           = uri.match(URI_REGEXP)  
+    this.scheme      = result[1] 
+    authority        = result[2]
+    
+    if authority?
+      authority_result = authority.match(AUTHORITY_REGEXP)
+      userinfo         = authority_result[1]     
+      if userinfo?
+        this.user      = userinfo.split(":")[0]
+        this.password  = userinfo.split(":")[1]
+    
+      this.host        = authority_result[2]
+      this.port        = parseInt(authority_result[3], 10) || null
+    
+    this.path        = result[3]
+    
+    this.query    = result[4]
+    this.query    = this.decodeParams(this.query)    if options.decodeQuery  
+    
+    this.fragment = result[5]
+    this.fragment = this.decodeParams(this.fragment) if options.decodeFragment
 
-  # end. return self
+  this.parse(uri, options)
   this
