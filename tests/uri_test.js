@@ -61,11 +61,25 @@ $(document).ready(function(){
     deepEqual(url.query, {'q': '1'});
   });
   
-  test("decodeHash option", function(){
+  test("decodeFragment option", function(){
     var originalUrl = '/someweird/path.js?q=1#f=2'    
     var url = new URI(originalUrl, {decodeFragment: true});
     deepEqual(url.fragment, {'f': '2'});
   });
+
+  test("toString() should encode query", function(){
+    var uri = new URI("http://example.com")
+    uri.query = {a: 1, b: [1,2,3]}
+    equals(uri.toString(), "http://example.com/?a=1&b[]=1&b[]=2&b[]=3");
+  });
+
+  test("toString() should encode fragment", function(){
+    var uri = new URI("http://example.com")
+    uri.fragment = {"x": "y"}
+    equals(uri.toString(), "http://example.com/#x=y");
+  });
+
+
   
   module("decodeParams");
   test("decodeParams", function(){
@@ -96,8 +110,9 @@ $(document).ready(function(){
   module("encodeParams");
   test("encodeParams", function(){
     var uri = new URI();
-    equals(uri.encodeParams("already=Encoded"), "already=Encoded")
-    deepEqual(
+    equals(uri.encodeParams("already=Encoded"), "already=Encoded");
+    equals(uri.encodeParams({a: 1, b: 2}), "a=1&b=2")
+    equals(
       uri.encodeParams({
         "foo": "12 3",
         "a": {

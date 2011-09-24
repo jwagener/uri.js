@@ -25,11 +25,14 @@ URI = function(uri, options) {
       }
     }
     str += this.path;
+    if (this.path === "" && ((this.query != null) || (this.fragment != null))) {
+      str += "/";
+    }
     if (this.query != null) {
-      str += "?" + this.query;
+      str += "?" + this.encodeParams(this.query);
     }
     if (this.fragment != null) {
-      str += "#" + this.fragment;
+      str += "#" + this.encodeParams(this.fragment);
     }
     return str;
   };
@@ -115,6 +118,9 @@ URI = function(uri, options) {
       } else {
         paramString = params;
       }
+    }
+    if (prefix === '') {
+      paramString = paramString.replace(/\&$/, "");
     }
     return paramString;
   };

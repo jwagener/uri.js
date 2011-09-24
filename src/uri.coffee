@@ -10,10 +10,15 @@ URI = (uri="", options={}) ->
       str += this.user + ":" + this.password + "@" if this.user?        
       str += this.host
       str += ":" + this.port   if this.port?
+    
+    str += this.path
 
-    str += this.path    
-    str += "?" + this.query    if this.query?
-    str += "#" + this.fragment if this.fragment?
+    str += "/" if this.path == "" && (this.query? || this.fragment?)
+
+
+    str += "?" + this.encodeParams(this.query)    if this.query?
+    
+    str += "#" + this.encodeParams(this.fragment) if this.fragment?
     str
     
   this.isRelative = -> 
@@ -81,6 +86,10 @@ URI = (uri="", options={}) ->
         paramString = prefix + "=" + encodeURIComponent(params) + "&"
       else # return the string as it is.
         paramString = params
+        
+    # drop trailing amp if in root
+    paramString = paramString.replace(/\&$/, "") if prefix == ''
+    
     paramString
 
   this.scheme = this.user = this.password = this.host = this.port = this.path = this.query = this.fragment = null
