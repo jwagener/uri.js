@@ -36,10 +36,10 @@ URI.js provides a ruby URI likish class for JavaScript + Rails likish params en/
       uri.query         // => {"abc": "def"}
       uri.fragment      // => {"foo": "bar"}
   
-  The toString() method will take care of the encoding if query or fragment is an object:
+  The toString() method will take care of the encoding if the query or fragment is an object:
   
-      uri.query = {"something": "else"}
-      uri.toString()    // => "http://example.com/bla?something=else#foo=bar"
+      uri.query = {"some": {"deep": ["array", "stuff"]}}
+      uri.toString()    // => "http://example.com/bla?some[deep][]=array&some[deep][]=stuff#foo=bar"
 
 ## Changelog
 
