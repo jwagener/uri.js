@@ -14,11 +14,9 @@ URI = (uri="", options={}) ->
     str += this.path
 
     str += "/" if this.path == "" && (this.query? || this.fragment?)
-
-
     str += "?" + this.encodeParams(this.query)    if this.query?
-    
     str += "#" + this.encodeParams(this.fragment) if this.fragment?
+
     str
     
   this.isRelative = -> 
