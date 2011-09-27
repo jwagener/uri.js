@@ -1,6 +1,5 @@
-var URI;
 var __hasProp = Object.prototype.hasOwnProperty;
-URI = function(uri, options) {
+window.URI = function(uri, options) {
   var AUTHORITY_REGEXP, URI_REGEXP;
   if (uri == null) {
     uri = "";

@@ -1,4 +1,4 @@
-URI = (uri="", options={}) ->
+window.URI = (uri="", options={}) ->
   URI_REGEXP        = /^(?:([^:\/?\#]+):)?(?:\/\/([^\/?\#]*))?([^?\#]*)(?:\?([^\#]*))?(?:\#(.*))?/
   AUTHORITY_REGEXP  = /^(?:([^@]*)@)?([^:]*)(?::(\d*))?/
   this.scheme = this.user = this.password = this.host = this.port = this.path = this.query = this.fragment = null
