@@ -31,10 +31,12 @@ window.URI = (uri="", options={}) ->
   this.decodeParams = (string="") ->
     params = {}
     for part in string.split("&")
-      splitted = part.split("=")
-      key   =  decodeURIComponent(splitted[0])
-      value =  decodeURIComponent(splitted[1] || '')
-      this.normalizeParams(params, key, value)
+      if part != ""
+        splitted = part.split("=")
+        key   =  decodeURIComponent(splitted[0])
+        value =  decodeURIComponent(splitted[1] || '')
+        this.normalizeParams(params, key, value)
+    
     params
 
   this.normalizeParams = (params, name, v = NULL) ->
@@ -109,7 +111,7 @@ window.URI = (uri="", options={}) ->
     this.path        = result[3]
     
     this.query    = result[4]
-    this.query    = this.decodeParams(this.query)    if options.decodeQuery  
+    this.query    = this.decodeParams(this.query)    if options.decodeQuery
     
     this.fragment = result[5]
     this.fragment = this.decodeParams(this.fragment) if options.decodeFragment

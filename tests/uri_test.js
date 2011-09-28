@@ -60,7 +60,14 @@ $(document).ready(function(){
     var url = new URI(originalUrl, {decodeQuery: true});
     deepEqual(url.query, {'q': '1'});
   });
-  
+
+  test("decodeQuery without query", function(){
+    var originalUrl = '/someweird/path.js'    
+    var url = new URI(originalUrl, {decodeQuery: true, decodeFragment: true});
+    deepEqual(url.query, {});
+    deepEqual(url.fragment, {});
+  });
+
   test("decodeFragment option", function(){
     var originalUrl = '/someweird/path.js?q=1#f=2'    
     var url = new URI(originalUrl, {decodeFragment: true});

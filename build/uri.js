@@ -51,10 +51,12 @@ window.URI = function(uri, options) {
     _ref = string.split("&");
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       part = _ref[_i];
-      splitted = part.split("=");
-      key = decodeURIComponent(splitted[0]);
-      value = decodeURIComponent(splitted[1] || '');
-      this.normalizeParams(params, key, value);
+      if (part !== "") {
+        splitted = part.split("=");
+        key = decodeURIComponent(splitted[0]);
+        value = decodeURIComponent(splitted[1] || '');
+        this.normalizeParams(params, key, value);
+      }
     }
     return params;
   };
