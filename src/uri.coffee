@@ -34,7 +34,7 @@ window.URI = (uri="", options={}) ->
       if part != ""
         splitted = part.split("=")
         key   =  decodeURIComponent(splitted[0])
-        value =  decodeURIComponent(splitted[1] || '').replace("+", " ")
+        value =  decodeURIComponent(splitted[1] || '').replace(/\+/g, " ")
         this.normalizeParams(params, key, value)
     
     params

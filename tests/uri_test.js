@@ -92,9 +92,9 @@ $(document).ready(function(){
   test("decodeParams", function(){
     var uri = new URI();
     deepEqual(
-      uri.decodeParams("a[]=This+is%20encoded&a[]=2"),
+      uri.decodeParams("a[]=This+is%20encoded+val&a[]=2"),
       {
-        "a": ["This is encoded", "2"]
+        "a": ["This is encoded val", "2"]
       }
     );
     
