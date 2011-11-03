@@ -133,4 +133,29 @@ $(document).ready(function(){
       "foo=12%203&a[b][][id]=1&a[b][][id]=2&nope"
     );
   });
+  
+  
+  module("flattenParams");
+  test("flattenParams", function(){
+    var uri = new URI();
+    deepEqual(
+      uri.flattenParams({
+        "foo": "12 3",
+        "a": {
+          "b": [
+            {"id": 1},
+            {"id": 2}
+          ]
+        },
+        "nope": null // is this what we want?
+      }),
+      [
+        ["foo",        "12 3"],
+        ["a[b][][id]", 1],
+        ["a[b][][id]", 2],
+        ["nope",       null]
+      ]
+    );
+  });
+  
 });

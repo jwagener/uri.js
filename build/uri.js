@@ -88,15 +88,38 @@ window.URI = function(uri, options) {
     }
     return params;
   };
-  this.encodeParams = function(params, prefix) {
-    var key, paramString, prefixedKey, value, _i, _len;
+  this.encodeParams = function(params) {
+    var flattened, key, keyValueStrings, kv, paramString, value, _i, _len;
+    paramString = "";
+    if (params.constructor === String) {
+      return paramString = params;
+    } else {
+      flattened = this.flattenParams(params);
+      keyValueStrings = [];
+      for (_i = 0, _len = flattened.length; _i < _len; _i++) {
+        kv = flattened[_i];
+        key = kv[0];
+        value = kv[1];
+        if (value === null) {
+          keyValueStrings.push(key);
+        } else {
+          keyValueStrings.push(key + "=" + encodeURIComponent(value));
+        }
+      }
+      return paramString = keyValueStrings.join("&");
+    }
+  };
+  this.flattenParams = function(params, prefix, paramsArray) {
+    var key, prefixedKey, value, _i, _len;
     if (prefix == null) {
       prefix = '';
     }
-    paramString = "";
+    if (paramsArray == null) {
+      paramsArray = [];
+    }
     if (params === null) {
       if (prefix != null) {
-        paramString += prefix;
+        paramsArray.push([prefix, null]);
       }
     } else if (params.constructor === Object) {
       for (key in params) {
@@ -107,24 +130,17 @@ window.URI = function(uri, options) {
         } else {
           prefixedKey = key;
         }
-        paramString += this.encodeParams(value, prefixedKey);
+        this.flattenParams(value, prefixedKey, paramsArray);
       }
     } else if (params.constructor === Array) {
       for (_i = 0, _len = params.length; _i < _len; _i++) {
         value = params[_i];
-        paramString += this.encodeParams(value, prefix + "[]");
+        this.flattenParams(value, prefix + "[]", paramsArray);
       }
-    } else {
-      if (prefix !== '') {
-        paramString = prefix + "=" + encodeURIComponent(params) + "&";
-      } else {
-        paramString = params;
-      }
+    } else if (prefix !== '') {
+      paramsArray.push([prefix, params]);
     }
-    if (prefix === '') {
-      paramString = paramString.replace(/\&$/, "");
-    }
-    return paramString;
+    return paramsArray;
   };
   this.parse = function(uri, options) {
     var authority, authority_result, result, userinfo;
