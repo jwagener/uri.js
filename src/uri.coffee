@@ -105,26 +105,32 @@ window.URI = (uri="", options={}) ->
     paramsArray
 
   this.parse = (uri="", options={}) ->
+    nullIfBlank = (str) -> \
+      if str == ""
+        return null
+      else
+        return str
+
     result           = uri.match(URI_REGEXP)  
-    this.scheme      = result[1] 
+    this.scheme      = nullIfBlank(result[1])
     authority        = result[2]
-    
     if authority?
       authority_result = authority.match(AUTHORITY_REGEXP)
-      userinfo         = authority_result[1]     
+      userinfo         = nullIfBlank(authority_result[1])
+
       if userinfo?
         this.user      = userinfo.split(":")[0]
         this.password  = userinfo.split(":")[1]
-    
-      this.host        = authority_result[2]
+
+      this.host        = nullIfBlank(authority_result[2])
       this.port        = parseInt(authority_result[3], 10) || null
-    
+
     this.path        = result[3]
-    
-    this.query    = result[4]
+
+    this.query    = nullIfBlank(result[4])
     this.query    = this.decodeParams(this.query)    if options.decodeQuery
-    
-    this.fragment = result[5]
+
+    this.fragment = nullIfBlank(result[5])
     this.fragment = this.decodeParams(this.fragment) if options.decodeFragment
 
   this.parse(uri, options)

@@ -51,7 +51,7 @@ $(document).ready(function(){
     equals(url.host,     null);
     equals(url.port,     null);
     equals(url.path,     '/someweird/path.js');
-    equals(url.query,    "");
+    equals(url.query,    null);
     equals(url.fragment, 'f=2');
   });
   
