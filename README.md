@@ -1,6 +1,6 @@
 # URI.js
 ## Description
-URI.js provides a ruby URI likish class for JavaScript + Rails likish params en/decoding.
+URI.js provides a ruby URI likish class for JavaScript with Rails likish params en/decoding.
 
 ## Usage
   You can create an URI object from any URI String:
