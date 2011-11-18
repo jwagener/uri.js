@@ -31,10 +31,12 @@ window.URI = (uri="", options={}) ->
   this.decodeParams = (string="") ->
     params = {}
     for part in string.split("&")
-      splitted = part.split("=")
-      key   =  decodeURIComponent(splitted[0])
-      value =  decodeURIComponent(splitted[1] || '')
-      this.normalizeParams(params, key, value)
+      if part != ""
+        splitted = part.split("=")
+        key   =  decodeURIComponent(splitted[0])
+        value =  decodeURIComponent(splitted[1] || '').replace(/\+/g, " ")
+        this.normalizeParams(params, key, value)
+    
     params
 
   this.normalizeParams = (params, name, v = NULL) ->
@@ -66,52 +68,69 @@ window.URI = (uri="", options={}) ->
     params
     
   # will reverse decodeParams 
-  this.encodeParams = (params, prefix='') ->
+  this.encodeParams = (params) ->
     paramString = ""
+    if params.constructor == String
+      paramString = params
+    else 
+      flattened = this.flattenParams(params)
+      keyValueStrings = []
+      for kv in flattened
+        key = kv[0]
+        value = kv[1]
+        
+        if value == null
+          keyValueStrings.push(key)
+        else
+          keyValueStrings.push(key + "=" + encodeURIComponent(value))
+      paramString = keyValueStrings.join("&")
+
+  this.flattenParams = (params, prefix='', paramsArray=[]) ->
     if params == null 
-      paramString += prefix if prefix?
+      paramsArray.push([prefix, null]) if prefix?
     else if params.constructor == Object
       for own key, value of params
         if prefix != ""
           prefixedKey = prefix + "[" + key + "]"
         else
           prefixedKey = key
-        paramString += this.encodeParams(value, prefixedKey)
+
+        this.flattenParams(value, prefixedKey, paramsArray)
     else if params.constructor == Array
       for value in params
-        paramString += this.encodeParams(value, prefix + "[]")
-    else
-      if prefix != ''
-        paramString = prefix + "=" + encodeURIComponent(params) + "&"
-      else # return the string as it is.
-        paramString = params
-        
-    # drop trailing amp if in root
-    paramString = paramString.replace(/\&$/, "") if prefix == ''
-    
-    paramString
+        this.flattenParams(value, prefix + "[]", paramsArray)
+    else if prefix != ''
+      paramsArray.push([prefix, params])
+
+    paramsArray
 
   this.parse = (uri="", options={}) ->
+    nullIfBlank = (str) -> \
+      if str == ""
+        return null
+      else
+        return str
+
     result           = uri.match(URI_REGEXP)  
-    this.scheme      = result[1] 
+    this.scheme      = nullIfBlank(result[1])
     authority        = result[2]
-    
     if authority?
       authority_result = authority.match(AUTHORITY_REGEXP)
-      userinfo         = authority_result[1]     
+      userinfo         = nullIfBlank(authority_result[1])
+
       if userinfo?
         this.user      = userinfo.split(":")[0]
         this.password  = userinfo.split(":")[1]
-    
-      this.host        = authority_result[2]
+
+      this.host        = nullIfBlank(authority_result[2])
       this.port        = parseInt(authority_result[3], 10) || null
-    
+
     this.path        = result[3]
-    
-    this.query    = result[4]
-    this.query    = this.decodeParams(this.query)    if options.decodeQuery  
-    
-    this.fragment = result[5]
+
+    this.query    = nullIfBlank(result[4])
+    this.query    = this.decodeParams(this.query)    if options.decodeQuery
+
+    this.fragment = nullIfBlank(result[5])
     this.fragment = this.decodeParams(this.fragment) if options.decodeFragment
 
   this.parse(uri.toString(), options)

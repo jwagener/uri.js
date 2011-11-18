@@ -51,7 +51,7 @@ $(document).ready(function(){
     equals(url.host,     null);
     equals(url.port,     null);
     equals(url.path,     '/someweird/path.js');
-    equals(url.query,    "");
+    equals(url.query,    null);
     equals(url.fragment, 'f=2');
   });
   
@@ -65,7 +65,14 @@ $(document).ready(function(){
     var url = new URI(originalUrl, {decodeQuery: true});
     deepEqual(url.query, {'q': '1'});
   });
-  
+
+  test("decodeQuery without query", function(){
+    var originalUrl = '/someweird/path.js'    
+    var url = new URI(originalUrl, {decodeQuery: true, decodeFragment: true});
+    deepEqual(url.query, {});
+    deepEqual(url.fragment, {});
+  });
+
   test("decodeFragment option", function(){
     var originalUrl = '/someweird/path.js?q=1#f=2'    
     var url = new URI(originalUrl, {decodeFragment: true});
@@ -90,9 +97,9 @@ $(document).ready(function(){
   test("decodeParams", function(){
     var uri = new URI();
     deepEqual(
-      uri.decodeParams("a[]=1&a[]=2"),
+      uri.decodeParams("a[]=This+is%20encoded+val&a[]=2"),
       {
-        "a": ["1", "2"]
+        "a": ["This is encoded val", "2"]
       }
     );
     
@@ -131,4 +138,29 @@ $(document).ready(function(){
       "foo=12%203&a[b][][id]=1&a[b][][id]=2&nope"
     );
   });
+  
+  
+  module("flattenParams");
+  test("flattenParams", function(){
+    var uri = new URI();
+    deepEqual(
+      uri.flattenParams({
+        "foo": "12 3",
+        "a": {
+          "b": [
+            {"id": 1},
+            {"id": 2}
+          ]
+        },
+        "nope": null // is this what we want?
+      }),
+      [
+        ["foo",        "12 3"],
+        ["a[b][][id]", 1],
+        ["a[b][][id]", 2],
+        ["nope",       null]
+      ]
+    );
+  });
+  
 });
