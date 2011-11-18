@@ -55,6 +55,11 @@ $(document).ready(function(){
     equals(url.fragment, 'f=2');
   });
   
+  test("from window.location", function() {
+    var url = new URI(window.location);
+    equals(url.toString(),   window.location.toString());
+  });
+  
   test("decodeQuery option", function(){
     var originalUrl = '/someweird/path.js?q=1#f=2'    
     var url = new URI(originalUrl, {decodeQuery: true});

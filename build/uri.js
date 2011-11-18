@@ -155,6 +155,6 @@ window.URI = function(uri, options) {
       return this.fragment = this.decodeParams(this.fragment);
     }
   };
-  this.parse(uri, options);
+  this.parse(uri.toString(), options);
   return this;
 };

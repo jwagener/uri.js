@@ -114,5 +114,5 @@ window.URI = (uri="", options={}) ->
     this.fragment = result[5]
     this.fragment = this.decodeParams(this.fragment) if options.decodeFragment
 
-  this.parse(uri, options)
+  this.parse(uri.toString(), options)
   this
