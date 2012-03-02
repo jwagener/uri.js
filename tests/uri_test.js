@@ -85,14 +85,20 @@ $(document).ready(function(){
     equals(uri.toString(), "http://example.com/?a=1&b[]=1&b[]=2&b[]=3");
   });
 
+  test("toString() should not include ? or # if query and fragment is an empty hash", function(){
+    var uri = new URI("http://example.com")
+    uri.query = {}
+    uri.fragment = {}
+    equals(uri.toString(), "http://example.com/");
+  });
+
+
   test("toString() should encode fragment", function(){
     var uri = new URI("http://example.com")
     uri.fragment = {"x": "y"}
     equals(uri.toString(), "http://example.com/#x=y");
   });
 
-
-  
   module("decodeParams");
   test("decodeParams", function(){
     var uri = new URI();
