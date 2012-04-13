@@ -15,8 +15,8 @@ window.URI = (uri="", options={}) ->
     str += this.path
 
     str += "/" if this.path == "" && (this.query? || this.fragment?)
-    str += "?" + this.encodeParams(this.query)    if this.query?
-    str += "#" + this.encodeParams(this.fragment) if this.fragment?
+    str += this.encodeParamsWithPrepend(this.query, "?") if this.query?
+    str += this.encodeParamsWithPrepend(this.fragment, "#") if this.fragment?
 
     str
     
@@ -66,7 +66,15 @@ window.URI = (uri="", options={}) ->
       params[k] = this.normalizeParams(params[k], after, v)
 
     params
-    
+
+  # will encode params and prepend a string if it's not blank
+  this.encodeParamsWithPrepend = (params, prepend) ->
+    encoded = this.encodeParams(params)
+    if encoded != ""
+      prepend + encoded
+    else
+      ""
+
   # will reverse decodeParams 
   this.encodeParams = (params) ->
     paramString = ""
