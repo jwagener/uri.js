@@ -86,7 +86,7 @@ window.URI = (uri="", options={}) ->
       paramString = keyValueStrings.join("&")
 
   this.flattenParams = (params, prefix='', paramsArray=[]) ->
-    if params == null 
+    if !params?
       paramsArray.push([prefix, null]) if prefix?
     else if params.constructor == Object
       for own key, value of params

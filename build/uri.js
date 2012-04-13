@@ -117,7 +117,7 @@ window.URI = function(uri, options) {
     if (paramsArray == null) {
       paramsArray = [];
     }
-    if (params === null) {
+    if (!(params != null)) {
       if (prefix != null) {
         paramsArray.push([prefix, null]);
       }

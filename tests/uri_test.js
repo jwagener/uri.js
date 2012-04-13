@@ -81,14 +81,8 @@ $(document).ready(function(){
 
   test("toString() should encode query", function(){
     var uri = new URI("http://example.com")
-    uri.query = {a: 1, b: [1,2,3]}
-    equal(uri.toString(), "http://example.com/?a=1&b[]=1&b[]=2&b[]=3");
-  });
-
-  test("toString() should encode fragment", function(){
-    var uri = new URI("http://example.com")
-    uri.fragment = {"x": "y"}
-    equal(uri.toString(), "http://example.com/#x=y");
+    uri.query = {a: 1, b: [1,2,3], c: undefined}
+    equal(uri.toString(), "http://example.com/?a=1&b[]=1&b[]=2&b[]=3&c");
   });
 
   module("decodeParams");
