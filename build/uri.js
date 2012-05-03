@@ -29,10 +29,10 @@ window.URI = function(uri, options) {
       str += "/";
     }
     if (this.query != null) {
-      str += this.encodeParamsWithPrepend(this.query, "?");
+      str += "?" + this.encodeParams(this.query);
     }
     if (this.fragment != null) {
-      str += this.encodeParamsWithPrepend(this.fragment, "#");
+      str += "#" + this.encodeParams(this.fragment);
     }
     return str;
   };
@@ -88,15 +88,6 @@ window.URI = function(uri, options) {
     }
     return params;
   };
-  this.encodeParamsWithPrepend = function(params, prepend) {
-    var encoded;
-    encoded = this.encodeParams(params);
-    if (encoded !== "") {
-      return prepend + encoded;
-    } else {
-      return "";
-    }
-  };
   this.encodeParams = function(params) {
     var flattened, key, keyValueStrings, kv, paramString, value, _i, _len;
     paramString = "";
@@ -126,7 +117,7 @@ window.URI = function(uri, options) {
     if (paramsArray == null) {
       paramsArray = [];
     }
-    if (!(params != null)) {
+    if (params === null) {
       if (prefix != null) {
         paramsArray.push([prefix, null]);
       }
