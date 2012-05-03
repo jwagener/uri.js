@@ -15,8 +15,8 @@ window.URI = (uri="", options={}) ->
     str += this.path
 
     str += "/" if this.path == "" && (this.query? || this.fragment?)
-    str += this.encodeParamsWithPrepend(this.query, "?") if this.query?
-    str += this.encodeParamsWithPrepend(this.fragment, "#") if this.fragment?
+    str += "?" + this.encodeParams(this.query)    if this.query?
+    str += "#" + this.encodeParams(this.fragment) if this.fragment?
 
     str
     
@@ -25,7 +25,7 @@ window.URI = (uri="", options={}) ->
 
   this.isAbsolute = -> 
     this.host?
-  
+
   # decodeParams decodes a query string into an
   # object following the params rails conventions
   this.decodeParams = (string="") ->
@@ -67,14 +67,6 @@ window.URI = (uri="", options={}) ->
 
     params
 
-  # will encode params and prepend a string if it's not blank
-  this.encodeParamsWithPrepend = (params, prepend) ->
-    encoded = this.encodeParams(params)
-    if encoded != ""
-      prepend + encoded
-    else
-      ""
-
   # will reverse decodeParams 
   this.encodeParams = (params) ->
     paramString = ""
@@ -94,7 +86,7 @@ window.URI = (uri="", options={}) ->
       paramString = keyValueStrings.join("&")
 
   this.flattenParams = (params, prefix='', paramsArray=[]) ->
-    if !params?
+    if params == null
       paramsArray.push([prefix, null]) if prefix?
     else if params.constructor == Object
       for own key, value of params

@@ -4,60 +4,60 @@ $(document).ready(function(){
   test("from 'http://example.com/bla?abc=def#foo=bar'", function() {
     var originalUrl = 'http://example.com/bla?abc=def#foo=bar'
     var url = new URI(originalUrl);
-    equal(url.scheme,   'http');
-    equal(url.user,     null);
-    equal(url.password, null);
-    equal(url.host,     'example.com');
-    equal(url.port,     null);
-    equal(url.path,     '/bla');
-    equal(url.query,    'abc=def');
-    equal(url.fragment, 'foo=bar');
-    equal(url.isRelative(), false);
-    equal(url.isAbsolute(), true);
-    equal(url.toString(), originalUrl);
+    equals(url.scheme,   'http');
+    equals(url.user,     null);
+    equals(url.password, null);
+    equals(url.host,     'example.com');
+    equals(url.port,     null);
+    equals(url.path,     '/bla');
+    equals(url.query,    'abc=def');
+    equals(url.fragment, 'foo=bar');
+    equals(url.isRelative(), false);
+    equals(url.isAbsolute(), true);
+    equals(url.toString(), originalUrl);
   });
   
   test("from 'https://user:pass@127.0.0.1:342'", function() {
     var originalUrl = 'https://user:pass@127.0.0.1:342'
     var url = new URI(originalUrl);
-    equal(url.scheme,   'https');
-    equal(url.user,     'user');
-    equal(url.password, 'pass');
-    equal(url.host,     '127.0.0.1');
-    equal(url.port,     342);
-    equal(url.isRelative(), false);
-    equal(url.isAbsolute(), true);    
-    equal(url.toString(), originalUrl);
+    equals(url.scheme,   'https');
+    equals(url.user,     'user');
+    equals(url.password, 'pass');
+    equals(url.host,     '127.0.0.1');
+    equals(url.port,     342);
+    equals(url.isRelative(), false);
+    equals(url.isAbsolute(), true);
+    equals(url.toString(), originalUrl);
   });
 
   test("from '/someweird/path.js?q=1#f=2'", function() {
     var originalUrl = '/someweird/path.js?q=1#f=2'
     var url = new URI(originalUrl);
-    equal(url.scheme,   null);
-    equal(url.host,     null);
-    equal(url.port,     null);
-    equal(url.path,     '/someweird/path.js');
-    equal(url.query,    'q=1');
-    equal(url.fragment, 'f=2');
-    equal(url.isRelative(), true);
-    equal(url.isAbsolute(), false);
-    equal(url.toString(), originalUrl);
+    equals(url.scheme,   null);
+    equals(url.host,     null);
+    equals(url.port,     null);
+    equals(url.path,     '/someweird/path.js');
+    equals(url.query,    'q=1');
+    equals(url.fragment, 'f=2');
+    equals(url.isRelative(), true);
+    equals(url.isAbsolute(), false);
+    equals(url.toString(), originalUrl);
   });
   
   test("from '/someweird/path.js?#f=2'", function() {
     var originalUrl = '/someweird/path.js?#f=2'
     var url = new URI(originalUrl);
-    equal(url.scheme,   null);
-    equal(url.host,     null);
-    equal(url.port,     null);
-    equal(url.path,     '/someweird/path.js');
-    equal(url.query,    null);
-    equal(url.fragment, 'f=2');
+    equals(url.scheme,   null);
+    equals(url.host,     null);
+    equals(url.port,     null);
+    equals(url.path,     '/someweird/path.js');
+    equals(url.query,    null);
+    equals(url.fragment, 'f=2');
   });
   
   test("from window.location", function() {
     var url = new URI(window.location);
-    equal(url.toString(),   window.location.toString());
+    equals(url.toString(),   window.location.toString());
   });
   
   test("decodeQuery option", function(){
@@ -81,17 +81,9 @@ $(document).ready(function(){
 
   test("toString() should encode query", function(){
     var uri = new URI("http://example.com")
-    uri.query = {a: 1, b: [1,2,3], c: undefined}
-    equal(uri.toString(), "http://example.com/?a=1&b[]=1&b[]=2&b[]=3&c");
+    uri.query = {a: 1, b: [1,2,3]}
+    equals(uri.toString(), "http://example.com/?a=1&b[]=1&b[]=2&b[]=3");
   });
-
-  test("toString() should not include ? or # if query and fragment is an empty hash", function(){
-    var uri = new URI("http://example.com")
-    uri.query = {}
-    uri.fragment = {}
-    equals(uri.toString(), "http://example.com/");
-  });
-
 
   test("toString() should encode fragment", function(){
     var uri = new URI("http://example.com")
@@ -128,9 +120,9 @@ $(document).ready(function(){
   module("encodeParams");
   test("encodeParams", function(){
     var uri = new URI();
-    equal(uri.encodeParams("already=Encoded"), "already=Encoded");
-    equal(uri.encodeParams({a: 1, b: 2}), "a=1&b=2")
-    equal(
+    equals(uri.encodeParams("already=Encoded"), "already=Encoded");
+    equals(uri.encodeParams({a: 1, b: 2}), "a=1&b=2")
+    equals(
       uri.encodeParams({
         "foo": "12 3",
         "a": {
